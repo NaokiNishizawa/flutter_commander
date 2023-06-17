@@ -30,26 +30,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var shell = Shell();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () async {
-                // TODO do command
-                var shell = Shell();
-                await shell.run('''flutter pub get''');
-              },
-              child: const Text('pub get'),
-            ),
-          ],
-        ),
+      body: Row(
+        children: [],
       ),
     );
   }
