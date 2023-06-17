@@ -1,0 +1,4 @@
+enum CommandType {
+  doNotNeedAnything,
+  inputArgument,
+}
