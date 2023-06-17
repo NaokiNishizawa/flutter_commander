@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_commander/models/project_info.dart';
+import 'package:flutter_commander/widgets/organisms/input_project_info_dialog.dart';
 import 'package:process_run/shell.dart';
 
 void main() {
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Commander',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Commander Home Page'),
     );
@@ -40,6 +42,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Row(
         children: [],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          InputProjectInfoDialog(
+            context: context,
+            onOkTapped: (ProjectInfoModel model) {},
+          ).show();
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
