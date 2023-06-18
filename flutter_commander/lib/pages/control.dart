@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_commander/main.dart';
 import 'package:flutter_commander/widgets/organisms/commands.dart';
+import 'package:flutter_commander/widgets/organisms/result_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Control extends ConsumerStatefulWidget {
@@ -10,7 +11,9 @@ class Control extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _ControlState();
 }
 
-class _ControlState extends ConsumerState<Control> {
+class _ControlState extends ConsumerState<Control>
+    implements CommandsActionCallBack {
+  final resultScreen = ResultScreen();
   @override
   Widget build(BuildContext context) {
     final projectInfoModel = ref.read(projectInfoProvider);
@@ -28,12 +31,14 @@ class _ControlState extends ConsumerState<Control> {
         const Divider(),
         Expanded(
             child: Row(
-          children: const [
+          children: [
             Expanded(
-              child: Commands(),
+              child: Commands(callback: this),
             ),
-            VerticalDivider(),
-            Expanded(child: Text('右')),
+            const VerticalDivider(),
+            Expanded(
+              child: resultScreen,
+            ),
           ],
         )),
       ],
@@ -45,5 +50,10 @@ class _ControlState extends ConsumerState<Control> {
       ),
       body: content,
     );
+  }
+
+  @override
+  void commandTapped() {
+    resultScreen.executeCommand(ref);
   }
 }

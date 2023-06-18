@@ -5,7 +5,9 @@ import 'package:flutter_commander/widgets/organisms/result_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Commands extends StatefulWidget {
-  const Commands({super.key});
+  const Commands({super.key, required this.callback});
+
+  final CommandsActionCallBack callback;
 
   @override
   State<StatefulWidget> createState() => _CommandsState();
@@ -14,6 +16,8 @@ class Commands extends StatefulWidget {
 class _CommandsState extends State<Commands> {
   @override
   Widget build(BuildContext context) {
+    final CommandsActionCallBack callback = widget.callback;
+
     // FIXME 本当はFileなどから読み込めるようにすること ここから
     final doctorCmd = CommandInfoModel();
     doctorCmd.type = CommandType.doNotNeedAnything;
@@ -39,8 +43,14 @@ class _CommandsState extends State<Commands> {
       itemBuilder: (BuildContext context, int index) {
         final infoModel = commandInfoModelList[index];
         final widget = infoModel.type == CommandType.doNotNeedAnything
-            ? NoArgumentCmdForm(model: infoModel)
-            : InputArgumentCmdForm(model: infoModel);
+            ? NoArgumentCmdForm(
+                model: infoModel,
+                callBack: callback,
+              )
+            : InputArgumentCmdForm(
+                model: infoModel,
+                callBack: callback,
+              );
 
         return Card(
           child: widget,
@@ -51,15 +61,18 @@ class _CommandsState extends State<Commands> {
 }
 
 class NoArgumentCmdForm extends ConsumerWidget {
-  const NoArgumentCmdForm({super.key, required this.model});
+  const NoArgumentCmdForm(
+      {super.key, required this.model, required this.callBack});
 
   final CommandInfoModel model;
+  final CommandsActionCallBack callBack;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
         ref.read(scriptProvider.notifier).update((state) => model.script);
+        callBack.commandTapped();
       },
       child: SizedBox(
         height: 48,
@@ -78,10 +91,12 @@ class NoArgumentCmdForm extends ConsumerWidget {
 }
 
 class InputArgumentCmdForm extends ConsumerWidget {
-  InputArgumentCmdForm({super.key, required this.model});
+  InputArgumentCmdForm(
+      {super.key, required this.model, required this.callBack});
 
   final CommandInfoModel model;
   final _argumentTextController = TextEditingController();
+  final CommandsActionCallBack callBack;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -95,6 +110,7 @@ class InputArgumentCmdForm extends ConsumerWidget {
 
         final script = '${model.script} $packageName';
         ref.read(scriptProvider.notifier).update((state) => script);
+        callBack.commandTapped();
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -116,4 +132,8 @@ class InputArgumentCmdForm extends ConsumerWidget {
       ),
     );
   }
+}
+
+abstract class CommandsActionCallBack {
+  void commandTapped();
 }
