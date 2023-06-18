@@ -60,7 +60,9 @@ class RunningForm extends ConsumerWidget {
               textAlign: TextAlign.center,
             );
           },
-          loading: () => const CircularProgressIndicator(),
+          loading: () => const Align(
+            child: CircularProgressIndicator(),
+          ),
         );
   }
 
