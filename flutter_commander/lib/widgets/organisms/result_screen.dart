@@ -1,8 +1,10 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_commander/main.dart';
 import 'package:flutter_commander/viewModels/result_screen_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:process_run/shell.dart';
 
 final scriptProvider = StateProvider<String>((ref) => '');
 
@@ -46,13 +48,19 @@ class RunningForm extends ConsumerWidget {
     ref.read(resultScreenViewModelProvider.notifier);
 
     return ref.watch(resultScreenViewModelProvider).when(
-          data: (processResult) {
-            if (processResult == null) {
+          data: (processResultList) {
+            if (processResultList == null) {
               return const Text('実行開始');
             }
 
-            // TODO 実際の結果を表示する
-            return const Text('実行完了');
+            // 実行結果を表示する
+            return ListView.builder(
+              itemCount: processResultList.length,
+              itemBuilder: (BuildContext context, int index) {
+                final outText = processResultList[index].outText.toString();
+                return Text(outText);
+              },
+            );
           },
           error: (error, stack) {
             return Text(
@@ -68,6 +76,7 @@ class RunningForm extends ConsumerWidget {
 
   void execute(WidgetRef ref) {
     final script = ref.read(scriptProvider);
-    ref.read(resultScreenViewModelProvider.notifier).execute(script);
+    final path = ref.read(projectInfoProvider).projectPath;
+    ref.read(resultScreenViewModelProvider.notifier).execute(path, script);
   }
 }

@@ -8,14 +8,16 @@ final shellPerformerProvider = Provider(
 );
 
 abstract class ShellPerformer {
-  Future<List<ProcessResult>> execute(String script);
+  Future<List<ProcessResult>> execute(String inputDirPath, String script);
 }
 
 class ShellPerformerImpl extends ShellPerformer {
   final shell = Shell();
 
   @override
-  Future<List<ProcessResult>> execute(String script) async {
-    return shell.run(script);
+  Future<List<ProcessResult>> execute(
+      String inputDirPath, String script) async {
+    final cdShell = shell.cd(inputDirPath);
+    return cdShell.run(script);
   }
 }
