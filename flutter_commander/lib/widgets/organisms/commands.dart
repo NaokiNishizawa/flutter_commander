@@ -119,6 +119,9 @@ class InputArgumentCmdForm extends ConsumerWidget {
               child: Row(
             children: [
               Text(model.script),
+              const SizedBox(
+                width: 8,
+              ),
               Expanded(
                 child: TextFormField(
                   controller: _argumentTextController,
