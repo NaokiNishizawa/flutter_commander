@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_commander/base.dart';
 import 'package:flutter_commander/models/project_info.dart';
 import 'package:flutter_commander/pages/control.dart';
 import 'package:flutter_commander/viewModels/main_view_model.dart';
@@ -28,7 +29,7 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Commander Home Page'),
+      home: const Base(),
     );
   }
 }
